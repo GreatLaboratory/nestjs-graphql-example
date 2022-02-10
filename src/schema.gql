@@ -17,4 +17,5 @@ type Post {
 
 type Query {
   getAuthorById(id: Int!): Author!
+  getAuthorByName(firstName: String!, lastName: String!, limit: Int, offset: Int): Author!
 }
