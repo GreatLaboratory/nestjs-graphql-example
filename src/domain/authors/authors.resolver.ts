@@ -8,7 +8,7 @@ import { Author } from './models/author.model'
 export class AuthorsResolver {
 	constructor(private authorsService: AuthorsService, private postsService: PostsService) {}
 
-	@Query(() => Author, { name: 'getAuthorById' })
+	@Query(() => Author, { name: 'author' })
 	async getAuthorById(@Args('id', { type: () => Int }) id: number): Promise<Author> {
 		return await this.authorsService.findOneById(id)
 	}
