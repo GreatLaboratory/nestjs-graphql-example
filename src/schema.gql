@@ -9,6 +9,10 @@ type Author {
   posts: [Post!]!
 }
 
+type Mutation {
+  upvotePost(upvotePostArgs: UpvotePostArgsDto!): Post!
+}
+
 type Post {
   id: Int!
   title: String!
@@ -18,4 +22,8 @@ type Post {
 type Query {
   getAuthorById(id: Int!): Author!
   getAuthorByName(firstName: String!, lastName: String!, limit: Int, offset: Int): Author!
+}
+
+input UpvotePostArgsDto {
+  postId: Int!
 }
