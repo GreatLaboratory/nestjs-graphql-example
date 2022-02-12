@@ -9,6 +9,10 @@ import { PostsModule } from './domain/posts/posts.module'
 		AuthorsModule,
 		PostsModule,
 		GraphQLModule.forRoot({
+			subscriptions: {
+				'subscriptions-transport-ws': true,
+				'graphql-ws': true,
+			},
 			autoSchemaFile: path.join(process.cwd(), 'src/schema.gql'),
 			sortSchema: true,
 		}),

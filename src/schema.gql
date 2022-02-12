@@ -24,6 +24,10 @@ type Query {
   getAuthorByName(firstName: String!, lastName: String!, limit: Int, offset: Int): Author!
 }
 
+type Subscription {
+  upvotePostEvent(maxVotes: Int!): Post!
+}
+
 input UpvotePostArgsDto {
   postId: Int!
 }
