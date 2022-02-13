@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common'
-import { Args, Int, Mutation, Resolver, Subscription } from '@nestjs/graphql'
+import { Args, Directive, Int, Mutation, Resolver, Subscription } from '@nestjs/graphql'
 import { PubSub } from 'graphql-subscriptions'
 import { UpvotePostArgsDto } from './dto/upvote-post.args'
 import { Post } from './models/post.model'
@@ -9,7 +9,8 @@ import { PostsService } from './posts.service'
 export class PostsResolver {
 	constructor(private postsService: PostsService, @Inject('PUB_SUB') private pubSub: PubSub) {}
 
-	@Mutation(() => Post)
+	// @Directive('@deprecated(reason: "This query will be removed in the next version")')
+	@Mutation(() => Post, { deprecationReason: 'This query will be removed in the next version' })
 	async upvotePost(@Args('upvotePostArgs') upvotePostArgs: UpvotePostArgsDto): Promise<Post> {
 		const { postId } = upvotePostArgs
 		const newPost: Post = await this.postsService.upvotePost(postId)
