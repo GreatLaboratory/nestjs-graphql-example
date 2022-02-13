@@ -10,6 +10,7 @@ export class PostsService {
 				id: 1,
 				title: `query test title authorId: ${authorId}`,
 				votes: this.votes,
+				createdAt: new Date(),
 			},
 		]
 	}
@@ -19,6 +20,7 @@ export class PostsService {
 			id: postId,
 			title: 'mutation test title',
 			votes: this.votes++,
+			createdAt: new Date(),
 		}
 	}
 }
