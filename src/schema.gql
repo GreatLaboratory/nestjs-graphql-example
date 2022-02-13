@@ -20,7 +20,7 @@ type Mutation {
 
 type Post {
   createdAt: DateTime!
-  id: ID!
+  id: Int!
   title: String!
   votes: Int
 }
