@@ -1,16 +1,12 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql'
+import { Field, ObjectType } from '@nestjs/graphql'
 import { Post } from 'src/domain/posts/models/post.model'
+import { Human } from './human.model'
 
-@ObjectType()
-export class Author {
-	@Field(() => Int)
+@ObjectType({ implements: () => [Human] })
+export class Author implements Human {
 	id: number
-
-	@Field({ nullable: true })
-	firstName?: string
-
-	@Field({ nullable: true })
-	lastName?: string
+	firstName: string
+	lastName: string
 
 	@Field(() => [Post])
 	posts: Post[]

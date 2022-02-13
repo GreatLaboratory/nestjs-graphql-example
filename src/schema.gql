@@ -2,7 +2,7 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Author {
+type Author implements Human {
   firstName: String
   id: Int!
   lastName: String
@@ -13,6 +13,12 @@ type Author {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+interface Human {
+  firstName: String
+  id: Int!
+  lastName: String
+}
 
 type Mutation {
   upvotePost(upvotePostArgs: UpvotePostArgsDto!): Post! @deprecated(reason: "This query will be removed in the next version")
