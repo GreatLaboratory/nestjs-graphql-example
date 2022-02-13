@@ -25,10 +25,17 @@ type Mutation {
 }
 
 type Post {
+  color: PostColor!
   createdAt: DateTime!
   id: Int!
   title: String!
   votes: Int
+}
+
+enum PostColor {
+  BLUE
+  GREEN
+  RED
 }
 
 type Query {

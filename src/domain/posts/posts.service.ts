@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Post } from './models/post.model'
+import { Post, PostColor } from './models/post.model'
 
 @Injectable()
 export class PostsService {
@@ -10,6 +10,7 @@ export class PostsService {
 				id: 1,
 				title: `query test title authorId: ${authorId}`,
 				votes: this.votes,
+				color: PostColor.RED,
 				createdAt: new Date(),
 			},
 		]
@@ -20,6 +21,7 @@ export class PostsService {
 			id: postId,
 			title: 'mutation test title',
 			votes: this.votes++,
+			color: PostColor.GREEN,
 			createdAt: new Date(),
 		}
 	}
