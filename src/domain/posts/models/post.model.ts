@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType, GraphQLISODateTime, Directive, registerEnumType } from '@nestjs/graphql'
+import { loggerMiddleware } from 'src/common/middlewares/field-logger.middleware'
 
 @ObjectType()
 export class Post {
@@ -6,7 +7,7 @@ export class Post {
 	id: number
 
 	@Directive('@upper')
-	@Field()
+	@Field({ middleware: [loggerMiddleware] }) // 특정 필드에만 미들웨어 적용할 때
 	title: string
 
 	@Field(() => Int, { nullable: true })
