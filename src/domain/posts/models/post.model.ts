@@ -1,5 +1,16 @@
-import { Field, Int, ObjectType, GraphQLISODateTime, Directive, registerEnumType } from '@nestjs/graphql'
-import { loggerMiddleware } from 'src/common/middlewares/field-logger.middleware'
+import { Field, Int, ObjectType, GraphQLISODateTime, Directive, registerEnumType, Extensions } from '@nestjs/graphql'
+import { checkRoleMiddleware, loggerMiddleware } from 'src/common/middlewares/field-logger.middleware'
+
+export enum Role {
+	ADMIN,
+	GUEST,
+}
+
+export enum PostColor {
+	RED,
+	GREEN,
+	BLUE,
+}
 
 @ObjectType()
 export class Post {
@@ -7,7 +18,8 @@ export class Post {
 	id: number
 
 	@Directive('@upper')
-	@Field({ middleware: [loggerMiddleware] }) // 특정 필드에만 미들웨어 적용할 때
+	@Field({ middleware: [checkRoleMiddleware, loggerMiddleware] }) // 특정 필드에만 미들웨어 적용할 때
+	@Extensions({ role: [Role.GUEST] }) // 해당 필드는 ADMIN role을 갖는 사용자만 접근할 수 있다.
 	title: string
 
 	@Field(() => Int, { nullable: true })
@@ -19,12 +31,6 @@ export class Post {
 	// GraphQLISODateTime 타입을 default로 따른다.
 	@Field()
 	createdAt: Date
-}
-
-export enum PostColor {
-	RED,
-	GREEN,
-	BLUE,
 }
 
 registerEnumType(PostColor, {
