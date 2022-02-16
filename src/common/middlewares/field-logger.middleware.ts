@@ -1,6 +1,6 @@
 import { ForbiddenException } from '@nestjs/common'
 import { FieldMiddleware, MiddlewareContext, NextFn } from '@nestjs/graphql'
-import { Role } from 'src/domain/posts/models/post.model'
+import { Role } from '../../domain/posts/models/post.model'
 
 export const loggerMiddleware: FieldMiddleware = async (ctx: MiddlewareContext, next: NextFn) => {
 	// The MiddlewareContext is an object that consist of the same arguments that are normally received by the GraphQL resolver function

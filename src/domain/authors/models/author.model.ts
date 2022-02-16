@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { Post } from 'src/domain/posts/models/post.model'
 import { Human } from '../../../common/models/human.model'
+import { Post } from '../../posts/models/post.model'
 
 @ObjectType({ implements: () => [Human] })
 export class Author implements Human {

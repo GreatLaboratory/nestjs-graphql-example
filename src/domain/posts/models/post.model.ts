@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType, GraphQLISODateTime, Directive, registerEnumType, Extensions } from '@nestjs/graphql'
-import { checkRoleMiddleware, loggerMiddleware } from 'src/common/middlewares/field-logger.middleware'
+import { checkRoleMiddleware, loggerMiddleware } from '../../../common/middlewares/field-logger.middleware'
 
 export enum Role {
 	ADMIN,
