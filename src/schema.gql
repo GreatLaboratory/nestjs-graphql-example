@@ -9,6 +9,17 @@ type Author implements Human {
   posts: [Post!]!
 }
 
+interface BaseModel {
+  createdAt: DateTime!
+  id: ID!
+  updatedAt: DateTime!
+}
+
+input CreatePlayerDto {
+  age: Int!
+  name: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -21,7 +32,16 @@ interface Human {
 }
 
 type Mutation {
+  createPlayer(createPlayerDto: CreatePlayerDto!): PlayerModel!
   upvotePost(upvotePostArgs: UpvotePostArgsDto!): Post! @deprecated(reason: "This query will be removed in the next version")
+}
+
+type PlayerModel implements BaseModel {
+  age: Int!
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  updatedAt: DateTime!
 }
 
 type Post {
@@ -39,6 +59,7 @@ enum PostColor {
 }
 
 type Query {
+  getAllPlayers: [PlayerModel!]!
   getAuthorById(id: Int!): Author!
   getAuthorByName(firstName: String!, lastName: String!, limit: Int, offset: Int): Author!
 }
