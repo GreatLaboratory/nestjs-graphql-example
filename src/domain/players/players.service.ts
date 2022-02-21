@@ -1,7 +1,8 @@
-import { EntityRepository } from '@mikro-orm/core'
+import { EntityRepository, wrap } from '@mikro-orm/core'
 import { InjectRepository } from '@mikro-orm/nestjs'
 import { Injectable } from '@nestjs/common'
 import { CreatePlayerDto } from './dto/CreatePlayerDto'
+import { PersonEntity } from './entities/person.entity'
 import { PlayerEntity } from './entities/player.entity'
 import { PlayerModel } from './models/player.model'
 
@@ -10,6 +11,8 @@ export class PlayersService {
 	constructor(
 		@InjectRepository(PlayerEntity)
 		private readonly playerRepository: EntityRepository<PlayerEntity>,
+		@InjectRepository(PersonEntity)
+		private readonly personRepository: EntityRepository<PersonEntity>,
 	) {}
 
 	async findAll(): Promise<PlayerModel[]> {
@@ -21,6 +24,17 @@ export class PlayersService {
 		// It will make the entity managed by given EntityManager and once flush will be called, it will be written to the database.
 		const newPlayer: PlayerEntity = this.playerRepository.create(createPlayerDto)
 		await this.playerRepository.persistAndFlush(newPlayer)
+
+		const person = this.personRepository.create({ firstName: 'Jon', lastName: 'Snow' })
+		console.log(person.isInitialized()) // true
+		console.log(person) // { firstName: 'Jon', lastName: 'Snow' }
+		console.log(person.firstName) // Jon
+		console.log(person.lastName) // Snow
+
+		console.log(person.getFullName()) // 'Jon Snow'
+		console.log(person.fullName2) // 'Jon Snow'
+		console.log(wrap(person)) // { fullName: 'Jon Snow', fullName2: 'Jon Snow' }
+
 		return newPlayer
 	}
 }
