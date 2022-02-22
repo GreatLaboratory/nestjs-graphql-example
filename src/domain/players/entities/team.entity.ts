@@ -4,6 +4,10 @@ import { PlayerEntity } from './player.entity'
 
 @Entity({ tableName: 'team' })
 export class TeamEntity extends CustomBaseEntity {
+	constructor(name: string) {
+		super()
+		this.name = name
+	}
 	@Property()
 	name: string
 

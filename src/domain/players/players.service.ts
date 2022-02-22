@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common'
 import { CreatePlayerDto } from './dto/CreatePlayerDto'
 import { PersonEntity } from './entities/person.entity'
 import { PlayerEntity } from './entities/player.entity'
+import { TeamEntity } from './entities/team.entity'
 import { PlayerModel } from './models/player.model'
 
 @Injectable()
@@ -22,7 +23,8 @@ export class PlayersService {
 	async createPlayer(createPlayerDto: CreatePlayerDto): Promise<PlayerEntity> {
 		// persist(entity) is used to mark new entities for future persisting.
 		// It will make the entity managed by given EntityManager and once flush will be called, it will be written to the database.
-		const newPlayer: PlayerEntity = this.playerRepository.create(createPlayerDto)
+		const newTeam: TeamEntity = new TeamEntity('RiverPool')
+		const newPlayer: PlayerEntity = this.playerRepository.create({ ...createPlayerDto, team: newTeam })
 		await this.playerRepository.persistAndFlush(newPlayer)
 
 		const person = this.personRepository.create({ firstName: 'Jon', lastName: 'Snow' })
