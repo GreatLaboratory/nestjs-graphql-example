@@ -41,6 +41,7 @@ type PlayerModel implements BaseModel {
   createdAt: DateTime!
   id: ID!
   name: String!
+  team: TeamModel!
   updatedAt: DateTime!
 }
 
@@ -66,6 +67,13 @@ type Query {
 
 type Subscription {
   upvotePostEvent(maxVotes: Int!): Post!
+}
+
+type TeamModel implements BaseModel {
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  updatedAt: DateTime!
 }
 
 input UpvotePostArgsDto {

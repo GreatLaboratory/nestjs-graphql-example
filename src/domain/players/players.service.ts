@@ -17,7 +17,11 @@ export class PlayersService {
 	) {}
 
 	async findAll(): Promise<PlayerModel[]> {
-		return await this.playerRepository.findAll()
+		return await this.playerRepository.findAll({ populate: true })
+
+		// 아래와 같이 populate helper함수를 사용하면 이미 로드된 엔티티에 대해서도 참조를 찾아낼 수 있다.
+		const players: PlayerEntity[] = await this.playerRepository.findAll()
+		return await this.playerRepository.populate(players, ['team'])
 	}
 
 	async createPlayer(createPlayerDto: CreatePlayerDto): Promise<PlayerEntity> {
