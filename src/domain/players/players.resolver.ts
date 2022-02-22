@@ -11,6 +11,10 @@ export class PlayersResolver {
 	async getAllPlayers(): Promise<PlayerModel[]> {
 		return await this.playersService.findAll()
 	}
+	@Query(() => PlayerModel)
+	async getPlayer(): Promise<PlayerModel> {
+		return await this.playersService.findOne()
+	}
 
 	@Mutation(() => PlayerModel)
 	async createPlayer(@Args('createPlayerDto') createPlayerDto: CreatePlayerDto): Promise<PlayerModel> {

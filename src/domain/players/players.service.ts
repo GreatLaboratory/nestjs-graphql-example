@@ -1,4 +1,4 @@
-import { EntityRepository, wrap } from '@mikro-orm/core'
+import { EntityRepository, PlainObject, wrap } from '@mikro-orm/core'
 import { InjectRepository } from '@mikro-orm/nestjs'
 import { Injectable } from '@nestjs/common'
 import { CreatePlayerDto } from './dto/CreatePlayerDto'
@@ -22,6 +22,28 @@ export class PlayersService {
 		// 아래와 같이 populate helper함수를 사용하면 이미 로드된 엔티티에 대해서도 참조를 찾아낼 수 있다.
 		const players: PlayerEntity[] = await this.playerRepository.findAll()
 		return await this.playerRepository.populate(players, ['team'])
+
+		// 아래와 같이 find함수에 pk 배열로 찾을 수도 있다.
+		return await this.playerRepository.find(
+			['c8475f21-c1c6-413e-91ab-190a367b5288', 'e97c4abd-4b42-42f4-9235-56947a930825'],
+			{ populate: true },
+		)
+	}
+
+	async findOne(): Promise<PlayerModel> {
+		// player id - pk로 선수 찾기
+		return await this.playerRepository.findOne('e97c4abd-4b42-42f4-9235-56947a930825')
+
+		// 특정 필드만 조회하기 (populate까지)
+		return await this.playerRepository.findOne('e97c4abd-4b42-42f4-9235-56947a930825', {
+			fields: ['name', 'age', { team: ['name'] }],
+		})
+
+		// team id로 선수 찾기
+		return await this.playerRepository.findOne({ team: 'eb01155e-3d48-42ee-8e28-0341be4a5c79' })
+
+		// team name으로 선수 찾기
+		return await this.playerRepository.findOne({ team: { name: 'RiverPool' } }, { populate: true })
 	}
 
 	async createPlayer(createPlayerDto: CreatePlayerDto): Promise<PlayerEntity> {
