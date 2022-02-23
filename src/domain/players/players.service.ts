@@ -1,4 +1,4 @@
-import { EntityRepository, PlainObject, wrap } from '@mikro-orm/core'
+import { EntityRepository, wrap } from '@mikro-orm/core'
 import { InjectRepository } from '@mikro-orm/nestjs'
 import { Injectable } from '@nestjs/common'
 import { CreatePlayerDto } from './dto/CreatePlayerDto'
@@ -14,10 +14,17 @@ export class PlayersService {
 		private readonly playerRepository: EntityRepository<PlayerEntity>,
 		@InjectRepository(PersonEntity)
 		private readonly personRepository: EntityRepository<PersonEntity>,
+		@InjectRepository(TeamEntity)
+		private readonly teamRepository: EntityRepository<TeamEntity>,
 	) {}
 
 	async findAll(): Promise<PlayerModel[]> {
 		return await this.playerRepository.findAll({ populate: true })
+
+		// 아래와 같이 pagination 가능
+		const [players2, count] = await this.playerRepository.findAndCount({}, { limit: 2, offset: 1 })
+		console.log('count : ', count) // pagination 없이 총 로우 갯수
+		return players2
 
 		// 아래와 같이 populate helper함수를 사용하면 이미 로드된 엔티티에 대해서도 참조를 찾아낼 수 있다.
 		const players: PlayerEntity[] = await this.playerRepository.findAll()
@@ -49,8 +56,13 @@ export class PlayersService {
 	async createPlayer(createPlayerDto: CreatePlayerDto): Promise<PlayerEntity> {
 		// persist(entity) is used to mark new entities for future persisting.
 		// It will make the entity managed by given EntityManager and once flush will be called, it will be written to the database.
-		const newTeam: TeamEntity = new TeamEntity('RiverPool')
-		const newPlayer: PlayerEntity = this.playerRepository.create({ ...createPlayerDto, team: newTeam })
+		const team: TeamEntity = await this.teamRepository.findOne({ name: 'RiverPool' })
+		let newPlayer: PlayerEntity
+		if (team) {
+			newPlayer = this.playerRepository.create({ ...createPlayerDto, team })
+		} else {
+			newPlayer = this.playerRepository.create({ ...createPlayerDto, team: new TeamEntity('RiverPool') })
+		}
 		await this.playerRepository.persistAndFlush(newPlayer)
 
 		const person = this.personRepository.create({ firstName: 'Jon', lastName: 'Snow' })

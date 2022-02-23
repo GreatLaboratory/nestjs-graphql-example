@@ -60,10 +60,10 @@ enum PostColor {
 }
 
 type Query {
-  getAllPlayer: PlayerModel!
   getAllPlayers: [PlayerModel!]!
   getAuthorById(id: Int!): Author!
   getAuthorByName(firstName: String!, lastName: String!, limit: Int, offset: Int): Author!
+  getPlayer: PlayerModel!
 }
 
 type Subscription {
