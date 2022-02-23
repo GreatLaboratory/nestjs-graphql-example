@@ -54,15 +54,17 @@ export class PlayersService {
 	}
 
 	async createPlayer(createPlayerDto: CreatePlayerDto): Promise<PlayerEntity> {
+		let newPlayer: PlayerEntity
+		try {
+			const team: TeamEntity = await this.teamRepository.findOneOrFail({ name: 'Arsenal' })
+			newPlayer = this.playerRepository.create({ ...createPlayerDto, team })
+		} catch (e) {
+			console.log(e)
+			newPlayer = this.playerRepository.create({ ...createPlayerDto, team: new TeamEntity('Arsenal') }) // persist cascade
+		}
+
 		// persist(entity) is used to mark new entities for future persisting.
 		// It will make the entity managed by given EntityManager and once flush will be called, it will be written to the database.
-		const team: TeamEntity = await this.teamRepository.findOne({ name: 'RiverPool' })
-		let newPlayer: PlayerEntity
-		if (team) {
-			newPlayer = this.playerRepository.create({ ...createPlayerDto, team })
-		} else {
-			newPlayer = this.playerRepository.create({ ...createPlayerDto, team: new TeamEntity('RiverPool') })
-		}
 		await this.playerRepository.persistAndFlush(newPlayer)
 
 		const person = this.personRepository.create({ firstName: 'Jon', lastName: 'Snow' })
