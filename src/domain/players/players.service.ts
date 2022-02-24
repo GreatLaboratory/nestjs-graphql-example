@@ -6,12 +6,14 @@ import { PersonEntity } from './entities/person.entity'
 import { PlayerEntity } from './entities/player.entity'
 import { TeamEntity } from './entities/team.entity'
 import { PlayerModel } from './models/player.model'
+import { PlayerRepository } from './players.repository'
 
 @Injectable()
 export class PlayersService {
 	constructor(
 		@InjectRepository(PlayerEntity)
 		private readonly playerRepository: EntityRepository<PlayerEntity>,
+		private readonly customPlayerRepository: PlayerRepository,
 		@InjectRepository(PersonEntity)
 		private readonly personRepository: EntityRepository<PersonEntity>,
 		@InjectRepository(TeamEntity)
@@ -31,7 +33,7 @@ export class PlayersService {
 		return await this.playerRepository.populate(players, ['team'])
 
 		// 아래와 같이 find함수에 pk 배열로 찾을 수도 있다.
-		return await this.playerRepository.find(
+		return await this.customPlayerRepository.find(
 			['c8475f21-c1c6-413e-91ab-190a367b5288', 'e97c4abd-4b42-42f4-9235-56947a930825'],
 			{ populate: true },
 		)
